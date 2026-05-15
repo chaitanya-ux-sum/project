@@ -1,0 +1,422 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/chaitanya-ux-sum/project/blob/main/AI_Email_Assistant\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "duDqTTGLbZ9h"
+      },
+      "source": [
+        "#  AI EMAIL ASSISTANT\n",
+        "Chaitanya Jangare\n",
+        " 202501040187"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "fJptD73KbcXn"
+      },
+      "outputs": [],
+      "source": [
+        "!pip install -q transformers huggingface_hub accelerate"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "WWeYu5j81zkk"
+      },
+      "outputs": [],
+      "source": [
+        "import os\n",
+        "from getpass import getpass\n",
+        "from huggingface_hub import login\n",
+        "\n",
+        "# This hides the characters as you paste them\n",
+        "os.environ[\"HF_TOKEN\"] = getpass(\"Enter your Hugging Face token: \")\n",
+        "login(token=os.environ[\"HF_TOKEN\"])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true,
+          "referenced_widgets": [
+            "c0f111f1429f4cf997f111f756b53275",
+            "f73aacc7b8cf462f9447a8045a9a95b1",
+            "a13e99f62dad44f99f6371dc0eabe583",
+            "128348a83ab849e1856055264e80f75c",
+            "77ed8816cb894c0d81501bb35e9de431",
+            "b73d75040ea34e339067f1400d20487d",
+            "efbeb1ddf7a04d5997ea6de581c4fb5c",
+            "0f33f45bf2c446cdb91d4643b8f6d9cb",
+            "3849ae5a405b483d9964077fec40bba7"
+          ]
+        },
+        "id": "oAj-k7dE8Ob2",
+        "outputId": "68bbba36-813d-4f39-88bc-20b24d12da63"
+      },
+      "outputs": [
+        {
+          "name": "stderr",
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_auth.py:103: UserWarning: \n",
+            "Error while fetching `HF_TOKEN` secret value from your vault: 'Requesting secret HF_TOKEN timed out. Secrets can only be fetched when running from the Colab UI.'.\n",
+            "You are not authenticated with the Hugging Face Hub in this notebook.\n",
+            "If the error persists, please let us know by opening an issue on GitHub (https://github.com/huggingface/huggingface_hub/issues/new).\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "c0f111f1429f4cf997f111f756b53275",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "config.json:   0%|          | 0.00/627 [00:00<?, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "f73aacc7b8cf462f9447a8045a9a95b1",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "model.safetensors.index.json: 0.00B [00:00, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "a13e99f62dad44f99f6371dc0eabe583",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "Downloading (incomplete total...): 0.00B [00:00, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "128348a83ab849e1856055264e80f75c",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "77ed8816cb894c0d81501bb35e9de431",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "Loading weights:   0%|          | 0/164 [00:00<?, ?it/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "b73d75040ea34e339067f1400d20487d",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "generation_config.json:   0%|          | 0.00/137 [00:00<?, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "efbeb1ddf7a04d5997ea6de581c4fb5c",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "tokenizer_config.json: 0.00B [00:00, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "0f33f45bf2c446cdb91d4643b8f6d9cb",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "tokenizer.json:   0%|          | 0.00/17.5M [00:00<?, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "3849ae5a405b483d9964077fec40bba7",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "special_tokens_map.json:   0%|          | 0.00/636 [00:00<?, ?B/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ],
+      "source": [
+        "from transformers import pipeline\n",
+        "import torch\n",
+        "\n",
+        "# Changed 'torch_dtype' to 'dtype' to fix the warning\n",
+        "generator = pipeline(\n",
+        "    \"text-generation\",\n",
+        "    model=\"google/gemma-2b-it\",\n",
+        "    dtype=torch.bfloat16,\n",
+        "    device_map=\"auto\"\n",
+        ")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true
+        },
+        "id": "TbAow_RS_PF6",
+        "outputId": "b35ee034-8763-44ad-edcc-bab91b6fd1c7"
+      },
+      "outputs": [
+        {
+          "name": "stderr",
+          "output_type": "stream",
+          "text": [
+            "Passing `generation_config` together with generation-related arguments=({'max_new_tokens', 'do_sample', 'temperature'}) is deprecated and will be removed in future versions. Please pass either a `generation_config` object OR all generation parameters explicitly, but not both.\n",
+            "Both `max_new_tokens` (=250) and `max_length`(=20) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)\n"
+          ]
+        },
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Act as a professional assistant. Write a formal email about: requesting an internship with [company name].\n",
+            "\n",
+            "Dear [Hiring Manager name],\n",
+            "\n",
+            "I am writing to express my keen interest in the [Internship name] position at [Company name]. With my strong academic background in [Relevant course], combined with my relevant skills and experience, I am confident that I possess the qualifications to excel in this role.\n",
+            "\n",
+            "I am particularly drawn to [Company name]'s commitment to [Company's value or mission]. My academic record and extracurricular involvement in [Relevant extracurricular activities] demonstrate my passion for [Relevant topic or industry]. I am eager to contribute my skills and knowledge to contribute to the success of your team.\n",
+            "\n",
+            "During my internship period, I am eager to learn from experienced professionals and develop my skills in the following areas: [List specific skills and areas of interest]. I am also available for any additional training or mentorship opportunities that you may suggest.\n",
+            "\n",
+            "I am available for an interview at your earliest convenience and can provide references upon request. Thank you for considering my application. I look forward to hearing from you soon to discuss my qualifications further.\n",
+            "\n",
+            "Sincerely,\n",
+            "[Your name]\n"
+          ]
+        }
+      ],
+      "source": [
+        "def email_assistant(task, context):\n",
+        "    # Role Prompting as per your guide[span_1](end_span)\n",
+        "    if task == \"write\":\n",
+        "        prompt = f\"Act as a professional assistant. Write a formal email about: {context}\"\n",
+        "    else:\n",
+        "        prompt = f\"Act as a helpful assistant. Write a polite reply to this: {context}\"\n",
+        "\n",
+        "    # [span_2](start_span)max_new_tokens=250 ensures the total email is written[span_2](end_span)\n",
+        "    result = generator(prompt, max_new_tokens=250, do_sample=True, temperature=0.7)\n",
+        "    return result[0][\"generated_text\"]\n",
+        "\n",
+        "# Test it\n",
+        "print(email_assistant(\"write\", \"requesting an internship\"))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true,
+          "referenced_widgets": [
+            "be879d31297a4a79bc9356bcaab46b58"
+          ]
+        },
+        "id": "DcziYjCu_PW3",
+        "outputId": "0d373f1a-d5db-4f1a-ac85-5a01d027ba39"
+      },
+      "outputs": [
+        {
+          "name": "stderr",
+          "output_type": "stream",
+          "text": [
+            "`torch_dtype` is deprecated! Use `dtype` instead!\n",
+            "`torch_dtype` is deprecated! Use `dtype` instead!\n"
+          ]
+        },
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Loading Model... Please wait.\n"
+          ]
+        },
+        {
+          "data": {
+            "application/vnd.jupyter.widget-view+json": {
+              "model_id": "be879d31297a4a79bc9356bcaab46b58",
+              "version_major": 2,
+              "version_minor": 0
+            },
+            "text/plain": [
+              "Loading weights:   0%|          | 0/164 [00:00<?, ?it/s]"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Colab notebook detected. To show errors in colab notebook, set debug=True in launch()\n",
+            "* Running on public URL: https://21749087102ad83c0a.gradio.live\n",
+            "\n",
+            "This share link expires in 1 week. For free permanent hosting and GPU upgrades, run `gradio deploy` from the terminal in the working directory to deploy to Hugging Face Spaces (https://huggingface.co/spaces)\n"
+          ]
+        },
+        {
+          "data": {
+            "text/html": [
+              "<div><iframe src=\"https://21749087102ad83c0a.gradio.live\" width=\"100%\" height=\"500\" allow=\"autoplay; camera; microphone; clipboard-read; clipboard-write;\" frameborder=\"0\" allowfullscreen></iframe></div>"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        },
+        {
+          "data": {
+            "text/plain": []
+          },
+          "execution_count": 5,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "import gradio as gr\n",
+        "from transformers import pipeline\n",
+        "import torch\n",
+        "\n",
+        "# 1. SETUP: Following Teacher's Step 8 (Instruction Model)\n",
+        "# We use Gemma-2b-it as recommended in the PDF\n",
+        "print(\"Loading Model... Please wait.\")\n",
+        "generator = pipeline(\n",
+        "    \"text-generation\",\n",
+        "    model=\"google/gemma-2b-it\",\n",
+        "    model_kwargs={\"torch_dtype\": torch.bfloat16},\n",
+        "    device_map=\"auto\"\n",
+        ")\n",
+        "\n",
+        "# 2. LOGIC: Following Teacher's Step 14 (Role Prompting)\n",
+        "def ai_email_assistant(task_type, tone, details):\n",
+        "    # Constructing the Role Prompt as per Practical Example 2\n",
+        "    if task_type == \"Generate New Email\":\n",
+        "        prompt = f\"Act as a professional AI assistant. Write a {tone} email about the following topic: {details}. Ensure it has a subject, greeting, and closing.\"\n",
+        "    else:\n",
+        "        prompt = f\"Act as a professional AI assistant. Write a {tone} reply to the following email content: {details}.\"\n",
+        "\n",
+        "    # Setting max_new_tokens to 300 to ensure 'Total Email' output\n",
+        "    output = generator(prompt, max_new_tokens=300, do_sample=True, temperature=0.7)\n",
+        "\n",
+        "    # Extracting the generated text\n",
+        "    return output[0][\"generated_text\"]\n",
+        "\n",
+        "# 3. INTERFACE: Creating the Gradio Website\n",
+        "with gr.Blocks(title=\"MITAOE AI Email Lab\") as demo:\n",
+        "    gr.Markdown(\"# 📧 AI Email & Reply Assistant\")\n",
+        "    gr.Markdown(\"### Developed following Prompt Engineering Lab Instructions\")\n",
+        "\n",
+        "    with gr.Row():\n",
+        "        with gr.Column():\n",
+        "            task = gr.Radio([\"Generate New Email\", \"Reply to Email\"], label=\"Task Selection\", value=\"Generate New Email\")\n",
+        "            tone = gr.Dropdown([\"Professional\", \"Formal\", \"Friendly\", \"Urgent\"], label=\"Tone\", value=\"Professional\")\n",
+        "            details = gr.Textbox(label=\"Details / Context\", placeholder=\"e.g., Requesting an internship...\", lines=5)\n",
+        "            btn = gr.Button(\"Create Email ✨\", variant=\"primary\")\n",
+        "\n",
+        "        with gr.Column():\n",
+        "            result = gr.Textbox(label=\"AI Output\", lines=12)\n",
+        "\n",
+        "    btn.click(fn=ai_email_assistant, inputs=[task, tone, details], outputs=result)\n",
+        "\n",
+        "# 4. LAUNCH: Using share=True to get a public link for the teacher\n",
+        "demo.launch(share=True)"
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMspvLISE2B4dFY6zu4xcSS",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
